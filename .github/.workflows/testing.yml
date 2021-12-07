@@ -1,0 +1,21 @@
+name: testing action scripts before wrapping in actions
+on: workflow_dispatch
+jobs:
+  setup-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - run: npm install
+      - run: node ./actions/setup-repo.js user repo
+  render-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - run: npm install
+      - run: node ./actions/render-readme.js user repo
+      - uses: stefanzweifel/git-auto-commit-action@v4.7.2
+        with:
+          commit_message: automated documenting on PR
+          branch: ${{ github.head_ref }}
